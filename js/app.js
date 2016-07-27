@@ -7,17 +7,45 @@ var astreet;
 var acity;
 var astate;
 
-$('#submitbutton').click(function() {
+var contactlist = [];
+
+$('#contactsformforreal').submit(function() {
     afirstName =  $('#firstnameinput').val();
+    console.log(afirstName);
     alastName = $('#lastnameinput').val();
     aphoneNumber = $('#phonenumberinput').val();
     astreet = $('#streetinput').val();
     acity = $('#cityinput').val();
     astate = $('#stateinput').val();
-    });
 
-var anaddress = new address(astreet, acity, astate);
-var acontact= new contactperson(afirstName, alastName, aphoneNumber, anaddress);
+
+    var anaddress = new address(astreet, acity, astate);
+    var acontact= new contactperson(afirstName, alastName, aphoneNumber, anaddress);
+
+    acontact.address = anaddress;
+    contactlist.push(acontact);
+
+    var contacthtml = "";
+    var contactjquery;
+
+    contacthtml += '<li>' + afirstName + " " + alastName + '</li>';
+    contactjquery = $(contacthtml);
+    function clickcallback (acontact) {
+      return function() {
+          $('#rightcontactlist h2').text(acontact.firstName);
+      };
+    }
+    contactjquery.click(clickcallback(acontact));
+
+  $('#showncontactlist').append(contactjquery);
+
+  document.getElementById('contactsformforreal').reset();
+
+    return false;
+});
+
+
+
 
 });
 
@@ -33,9 +61,3 @@ function address (street, city, state) {
   this.cityName = city;
   this.stateName = state;
 }
-
-var address = {
-  street: "",
-  city: "",
-  state: "",
-};
